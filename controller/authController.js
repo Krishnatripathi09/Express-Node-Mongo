@@ -23,6 +23,34 @@ const register = async (req, res) => {
   }
 };
 
+const login = async (req, res) => {
+  const { userName, password } = req.body;
+
+  if (!userName || !password) {
+    res.status(400).json({ message: "Please Enter all the Details" });
+  }
+
+  const foundUser = await User.findOne({
+    userName,
+  });
+
+  if (!foundUser) {
+    res
+      .status(404)
+      .json({ message: "Please Enter Valid Credentials ==>User Not Found" });
+  }
+
+  const validPassword = await bcrypt.compare(password, foundUser.password);
+  if (validPassword) {
+    res.status(200).send("Logged-In Success-Fully");
+  } else {
+    res
+      .status(400)
+      .json({ message: "Please Enter Valid Credentials ==> Wrong Password" });
+  }
+};
+
 module.exports = {
   register,
+  login,
 };

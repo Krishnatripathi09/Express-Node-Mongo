@@ -1,5 +1,6 @@
 const { User } = require("../models/userSchema");
 const bcrypt = require("bcrypt");
+const jwt = require("jsonwebtoken");
 const register = async (req, res) => {
   try {
     const { userName, password, role } = req.body;
@@ -41,8 +42,15 @@ const login = async (req, res) => {
   }
 
   const validPassword = await bcrypt.compare(password, foundUser.password);
+  const token = jwt.sign(
+    { id: foundUser.id, role: foundUser.role },
+    "MySecretToken#$6789",
+    {
+      expiresIn: "1hr",
+    }
+  );
   if (validPassword) {
-    res.status(200).send("Logged-In Success-Fully");
+    res.status(200).json({ token });
   } else {
     res
       .status(400)

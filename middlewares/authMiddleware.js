@@ -14,9 +14,13 @@ const adminAuth = (req, res, next) => {
     try {
       const decodedMsg = jwt.verify(token, "MySecretToken#$6789");
       req.user = decodedMsg;
-      next()
+      next();
     } catch (err) {
-      console.log("Error Occured :");
+      res.status(400).json({ Error: err });
     }
   }
+};
+
+module.exports = {
+  adminAuth,
 };

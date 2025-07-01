@@ -1,6 +1,7 @@
 const { User } = require("../models/userSchema");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
+const cookieparser = require("cookie-parser");
 const register = async (req, res) => {
   try {
     const { userName, password, role } = req.body;
@@ -50,7 +51,11 @@ const login = async (req, res) => {
     }
   );
   if (validPassword) {
-    res.status(200).json({ token });
+    res.cookie("token", token, {
+      httpOnly: true,
+      expires: new Date(Date.now() + 9 * 3600000),
+    });
+    res.status(200).json({ message: "Login SuccessFul" });
   } else {
     res
       .status(400)

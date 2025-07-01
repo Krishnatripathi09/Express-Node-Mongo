@@ -13,7 +13,19 @@ const storage = multer.diskStorage({
   },
 });
 
-const upload = multer({ storage: storage });
+const fileFilter = (req, file, cb) => {
+  try {
+    const allowedTypes = ["image/jpeg", "image/png", "application/pdf"];
+
+    if (allowedTypes.includes(file.mimeType)) {
+      cb(null, true);
+    } else cb(new Error("only image and pdf files allowed"));
+  } catch (err) {
+    res.status(400).send("Only images and pdf Files Allowed");
+  }
+};
+
+const upload = multer({ storage: storage, fileFilter });
 
 fileUpload.post("/upload", upload.single("file"), (req, res) => {
   try {
@@ -23,7 +35,7 @@ fileUpload.post("/upload", upload.single("file"), (req, res) => {
       res.status(200).json({ message: "File Uploaded SuccessFully" });
     }
   } catch (err) {
-    res.status(400).json({ message: "Error Occured", err });
+    res.status(400).json({ message: "Error Occured" });
   }
 });
 

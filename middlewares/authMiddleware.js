@@ -7,13 +7,14 @@ const adminAuth = (req, res, next) => {
 
   if (authHeader && authHeader.startsWith("Bearer")) {
     token = authHeader.split(" ")[1];
-
+  
     if (!token) {
       res.status(401).json({ message: "Un-Authorized! Please Log-In Again" });
     }
     try {
       const decodedMsg = jwt.verify(token, "MySecretToken#$6789");
       req.user = decodedMsg;
+
       next();
     } catch (err) {
       res.status(400).json({ Error: err });

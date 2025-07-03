@@ -1,6 +1,7 @@
 const express = require("express");
 const { adminAuth } = require("../middlewares/authMiddleware");
 const authorizedRoles = require("../middlewares/roleMiddleware");
+const User = require("../models/userSchema");
 
 const router = express.Router();
 
@@ -16,13 +17,16 @@ router.get(
     res.json({ message: "This is Manager Route" });
   }
 );
-
+console.log("I am User Route");
 router.get(
   "/user",
   adminAuth,
   authorizedRoles("admin", "manager", "user"),
-  (req, res) => {
-    res.json({ message: "This is User Route" });
+  async (req, res) => {
+    const userId = req.user.id;
+    console.log(userId);
+    const loggedInUser = await User.findOne({ id });
+    console.log(loggedInUser);
   }
 );
 

@@ -11,9 +11,6 @@ const PORT = process.env.PORT || 3002;
 
 app.use(express.json());
 app.use(cookieparser());
-app.use("/api/auth", authRouter);
-app.use("/api/users", userRoutes);
-app.use("/api/users", fileUpload);
 
 connectDB()
   .then(() => {
@@ -25,3 +22,7 @@ connectDB()
   .catch((err) => {
     console.log("Error Occured :", err);
   });
+
+app.use("/api/auth", authRouter);
+app.use("/api/users", userRoutes);
+app.use("/api/users", fileUpload);

@@ -57,7 +57,7 @@ const login = async (req, res) => {
       httpOnly: true,
       expires: new Date(Date.now() + 9 * 3600000),
     });
-    res.status(200).json({ message: "Login SuccessFul" });
+    res.status(200).json({ message: "Login SuccessFul", token });
   } else {
     res
       .status(400)

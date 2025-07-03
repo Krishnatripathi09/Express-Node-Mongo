@@ -14,6 +14,11 @@ const userSchema = mongoose.Schema({
   role: {
     type: String,
     required: true,
+    validate(value) {
+      if (!["admin", "manager", "user"].includes(value)) {
+        throw new Error("Only admin,manager and user roles allowed");
+      }
+    },
     enum: ["admin", "manager", "user"],
   },
 });

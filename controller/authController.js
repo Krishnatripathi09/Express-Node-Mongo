@@ -2,8 +2,10 @@ const { User } = require("../models/userSchema");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const cookieparser = require("cookie-parser");
+const { validateSignUpData } = require("../utils/validation");
 const register = async (req, res) => {
   try {
+    validateSignUpData(req);
     const { userName, password, role } = req.body;
 
     if (!userName || !password || !role) {
@@ -21,7 +23,7 @@ const register = async (req, res) => {
 
     res.status(201).json({ message: `User ${userName}, Created SuccessFully` });
   } catch (err) {
-    res.status(400).json({ message: "Error Occured" + err });
+    res.status(400).json({ message: "Error Occured " + err });
   }
 };
 
@@ -63,7 +65,16 @@ const login = async (req, res) => {
   }
 };
 
+const logOut = (req, res) => {
+  const { token } = req.cookies;
+  res.clearCookie(token, null, {
+    expires: new Date(Date.now()),
+  });
+  res.send("Log-Out SuccessFull");
+};
+
 module.exports = {
   register,
   login,
+  logOut,
 };

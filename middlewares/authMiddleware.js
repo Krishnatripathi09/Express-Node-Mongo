@@ -7,7 +7,7 @@ const adminAuth = (req, res, next) => {
 
   if (authHeader && authHeader.startsWith("Bearer")) {
     token = authHeader.split(" ")[1];
-  
+
     if (!token) {
       res.status(401).json({ message: "Un-Authorized! Please Log-In Again" });
     }
